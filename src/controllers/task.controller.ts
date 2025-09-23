@@ -1,34 +1,35 @@
 import { Request, Response } from "express";
-import { TaskRepository } from "../repositories/task.repository";
-import { UserRepository } from "../repositories/user.repository";
+import { TaskService } from "../services/task.service";
+
+const taskService = new TaskService();
 
 export class TaskController {
-  private taskRepo = new TaskRepository();
-  private userRepo = new UserRepository();
-
   create = async (req: Request, res: Response) => {
-    const { title, userId } = req.body;
-
-    const user = await this.userRepo.findById(userId);
-    if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
-
-    if (user.rol !== "admin") {
-      return res.status(403).json({ message: "Solo los administradores pueden crear tareas" });
+    try {
+      const { title, userId } = req.body;
+      const task = await taskService.createTask(title, Number(userId));
+      res.status(201).json(task);
+    } catch (err: any) {
+      res.status(400).json({ message: err.message });
     }
-
-    const task = await this.taskRepo.create(title, user);
-    res.json(task);
   };
 
-  getAll = async (req: Request, res: Response) => {
-    const tasks = await this.taskRepo.getAll();
-    res.json(tasks);
+  getAll = async (_req: Request, res: Response) => {
+    try {
+      const tasks = await taskService.getAllTasks();
+      res.json(tasks);
+    } catch (err: any) {
+      res.status(500).json({ message: "Error al obtener tareas" });
+    }
   };
 
   markCompleted = async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const task = await this.taskRepo.markCompleted(Number(id));
-    if (!task) return res.status(404).json({ message: "Tarea no encontrada" });
-    res.json(task);
+    try {
+      const { id } = req.params;
+      const task = await taskService.markTaskComplete(Number(id));
+      res.json(task);
+    } catch (err: any) {
+      res.status(400).json({ message: err.message });
+    }
   };
 }

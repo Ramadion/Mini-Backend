@@ -21,4 +21,8 @@ export class TaskRepository {
     task.completed = true;
     return await this.repo.save(task);
   }
+
+  async findOneById(id: number) {
+  return await this.repo.findOne({ where: { id }, relations: ["user"] });
+ }
 }

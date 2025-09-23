@@ -1,4 +1,4 @@
-// src/repositories/user.repository.ts
+
 import { AppdataSource } from "../config/data-source";
 import { User } from "../entities/user.entity";
 
@@ -17,4 +17,7 @@ export class UserRepository {
   async findById(id: number) {
     return await this.repo.findOne({ where: { id } });
   }
+
+  
+
 }

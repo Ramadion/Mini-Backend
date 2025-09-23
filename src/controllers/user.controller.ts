@@ -1,17 +1,21 @@
 import { Request, Response } from "express";
-import { UserRepository } from "../repositories/user.repository";
+import { UserService } from "../services/user.service";
+
+const userService = new UserService();
 
 export class UserController {
-  private userRepo = new UserRepository();
-
   create = async (req: Request, res: Response) => {
-    const { name, role } = req.body;
-    const user = await this.userRepo.create(name, role);
-    res.json(user);
+    try {
+      const { name, role } = req.body;
+      const user = await userService.createUser(name, role);
+      res.status(201).json(user);
+    } catch (err: any) {
+      res.status(400).json({ message: err.message });
+    }
   };
 
-  getAll = async (req: Request, res: Response) => {
-    const users = await this.userRepo.getAll();
+  getAll = async (_req: Request, res: Response) => {
+    const users = await userService.getAllUsers();
     res.json(users);
   };
 }
