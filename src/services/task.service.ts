@@ -12,7 +12,7 @@ export class TaskService {
     const user = await this.userService.findUserById(userId);
     if (!user) throw new Error("El usuario no existe");
     if (user.rol !== "admin") throw new Error("Solo los admins pueden crear tareas");
-    if (!user.team || user.team.id !== teamId) throw new Error("El admin solo puede crear tareas en su propio equipo");
+    
 
     return await this.taskRepo.create(title, description, teamId);
   }
