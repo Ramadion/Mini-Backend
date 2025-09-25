@@ -6,8 +6,8 @@ const taskService = new TaskService();
 export class TaskController {
   create = async (req: Request, res: Response) => {
     try {
-      const { title, userId } = req.body;
-      const task = await taskService.createTask(title, Number(userId));
+      const { title, description, teamId, userId } = req.body;
+      const task = await taskService.createTask(title, description, teamId, Number(userId));
       res.status(201).json(task);
     } catch (err: any) {
       res.status(400).json({ message: err.message });
@@ -25,11 +25,23 @@ export class TaskController {
 
   markCompleted = async (req: Request, res: Response) => {
     try {
-      const { id } = req.params;
-      const task = await taskService.markTaskComplete(Number(id));
-      res.json(task);
+      const id = Number(req.params.id);
+      const { userId } = req.body;
+      const task = await taskService.markTaskComplete(id, Number(userId));
+      return res.json(task);
     } catch (err: any) {
-      res.status(400).json({ message: err.message });
+      return res.status(400).json({ message: err.message });
+    }
+  };
+
+  delete = async (req: Request, res: Response) => {
+    try {
+      const id = Number(req.params.id);
+      const { userId } = req.body;
+      await taskService.deleteTask(id, Number(userId));
+      return res.status(204).send();
+    } catch (err: any) {
+      return res.status(400).json({ message: err.message });
     }
   };
 }

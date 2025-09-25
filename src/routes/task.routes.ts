@@ -7,5 +7,6 @@ const controller = new TaskController();
 router.post("/", controller.create);         // admin crea tarea
 router.get("/", controller.getAll);          // ver todas
 router.put("/:id/complete", controller.markCompleted); // user marca como completa
+router.delete("/:id", controller.delete);    // admin borra tarea
 
 export default router;
