@@ -23,6 +23,15 @@ Invoke-RestMethod -Uri "http://localhost:3000/users" -Method POST -Body '{"name"
 CREAR USER:
 Invoke-RestMethod -Uri "http://localhost:3000/users" -Method POST -Body '{"name":"Ramiro","role":"user"}' -ContentType "application/json"
 
+
+CREAR ADMIN:
+
+Invoke-RestMethod -Uri "http://localhost:3000/users" -Method POST -Body (@{
+    name = "administrador"
+    rol  = "admin"
+} | ConvertTo-Json -Depth 10 -Compress) -ContentType "application/json"
+
+
 CREAR TAREA :
 (solo puede el admin)
 (bash)
@@ -47,7 +56,7 @@ Invoke-RestMethod -Uri "http://localhost:3000/teams/1/users/2" -Method POST
 
 
 CREAR TAREA(NUEVO): 
-Invoke-RestMethod -Uri "http://localhost:3000/tasks" -Method POST -Body '{"title":"Hacer entrega","userId":1}' -ContentType "application/json"
+Invoke-RestMethod -Uri "http://localhost:3000/tasks" -Method POST -Body '{"title":"Hacer entrega","description":"Entregar el informe final","userId":1}' -ContentType "application/json"
 
 MARCAR TAREA COMPLETA(NUEVO): 
 Invoke-RestMethod -Uri "http://localhost:3000/tasks/1/complete" -Method PUT -Body '{"userId":2}' -ContentType "application/json"
