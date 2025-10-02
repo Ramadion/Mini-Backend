@@ -43,4 +43,15 @@ export class TeamController {
       return res.status(500).json({ message: "Error al obtener equipos" });
     }
   };
+  //NUEVO: UPDATE
+  update = async (req: Request, res: Response) => {
+    try {
+      const teamId = Number(req.params.id);
+      const { name, actorUserId } = req.body; // actorUserId es el ID del usuario que realiza la petición
+      const updatedTeam = await teamService.updateTeam(teamId, name, actorUserId);
+      return res.json(updatedTeam);
+    } catch (err: any) {
+      return res.status(400).json({ message: err.message });
+    }
+  };
 }
