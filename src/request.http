@@ -1,6 +1,7 @@
 ### Crear un admin
 
 POST http://localhost:3000/users
+
 Content-Type: application/json
 
 
@@ -20,19 +21,19 @@ Content-Type: application/json
 POST http://localhost:3000/users
 Content-Type: application/json
 
-
-
 {
 
   "name": "Ramiro",
 
-  "rol": "user"
+  "rol": "user",
 
+  "teamId": 2
 }
 
 ### Crear otro usuario
 
 POST http://localhost:3000/users
+
 Content-Type: application/json
 
 
@@ -41,9 +42,7 @@ Content-Type: application/json
 
   "name": "Sofia",
 
-  "rol": "user",
-
-  "teamId": 1
+  "rol": "user"
 
 }
 
@@ -54,13 +53,13 @@ Content-Type: application/json
 POST http://localhost:3000/teams
 Content-Type: application/json
 
+
+
 {
 
-  "name":"Equipo C"
+  "name": "Equipo C"
 
 }
-
-
 
 
 
@@ -68,28 +67,29 @@ Content-Type: application/json
 
 POST http://localhost:3000/teams/1/users/2
 
+
+
 ### Asignar admin al equipo (userId: 1 al teamId: 1)
 
 POST http://localhost:3000/teams/1/users/1
 
-### NUEVO: Actualizar nombre del equipo (solo admin del mismo equipo)
-PUT http://localhost:3000/teams/1
-Content-Type: application/json
 
-{"name":"Equipo Actualizado","userId":2} 
 
 ### Crear una tarea (solo admin del equipo)
 
 POST http://localhost:3000/tasks
+
 Content-Type: application/json
+
+
 
 {
 
-  "title": "Hacer entrega",
+  "title": "tarea de practica",
 
-  "description": "Subir el trabajo final",
+  "description": "acordardate de borrarlo despues",
 
-  "userId": 2,
+  "userId": 1,
 
   "teamId": 1
 
@@ -115,8 +115,16 @@ Content-Type: application/json
 
 ### Marcar tarea como completa (userId: 2)
 
-PUT http://localhost:3000/tasks/1/complete
+PUT http://localhost:3000/tasks/5/complete
+
+
+{
+  "userId": 1
+}
+
 Content-Type: application/json
+
+
 
 {
 
@@ -142,7 +150,26 @@ GET http://localhost:3000/users
 
 GET http://localhost:3000/teams
 
+###modificar tarea 
+PUT http://localhost:3000/tasks/3
+Content-Type: application/json
 
-### eliminar un equipo (solo admin del equipo)
-DELETE http://localhost:3000/teams/2
+{
+  "userId": 2,
+  "title": "Nuevo título",
+  "description": "Descripción acthjghjgjhjda",
+  "priority": "alta"
+}
+
+
+### editar usuario con id 1
+PUT http://localhost:3000/users/1
+Content-Type: application/json
+
+{
+  "name": "Ramiro Editado",
+  "rol": "admin",
+  "teamId": 2
+}
+
 
