@@ -54,4 +54,15 @@ export class TeamController {
       return res.status(400).json({ message: err.message });
     }
   };
+  //NUEVO: DELETE
+  delete = async (req: Request, res: Response) => {
+    try {
+      const teamId = Number(req.params.id);
+      const userId = Number(req.params.userId);
+      await teamService.deleteTeam(teamId, userId); // actorUserId es el ID del usuario que realiza la petición
+      return res.status(204).send();
+    } catch (err: any) {
+      return res.status(400).json({ message: err.message });
+    }
+  };
 }

@@ -1,7 +1,6 @@
 ### Crear un admin
 
 POST http://localhost:3000/users
-
 Content-Type: application/json
 
 
@@ -19,7 +18,6 @@ Content-Type: application/json
 ### Crear un usuario
 
 POST http://localhost:3000/users
-
 Content-Type: application/json
 
 
@@ -35,7 +33,6 @@ Content-Type: application/json
 ### Crear otro usuario
 
 POST http://localhost:3000/users
-
 Content-Type: application/json
 
 
@@ -44,7 +41,9 @@ Content-Type: application/json
 
   "name": "Sofia",
 
-  "rol": "user"
+  "rol": "user",
+
+  "teamId": 1
 
 }
 
@@ -53,10 +52,7 @@ Content-Type: application/json
 ### Crear un equipo
 
 POST http://localhost:3000/teams
-
 Content-Type: application/json
-
-
 
 {
 
@@ -72,8 +68,6 @@ Content-Type: application/json
 
 POST http://localhost:3000/teams/1/users/2
 
-
-
 ### Asignar admin al equipo (userId: 1 al teamId: 1)
 
 POST http://localhost:3000/teams/1/users/1
@@ -82,15 +76,12 @@ POST http://localhost:3000/teams/1/users/1
 PUT http://localhost:3000/teams/1
 Content-Type: application/json
 
-{"name":"Equipo Actualizado 3","userId":2}
+{"name":"Equipo Actualizado","userId":2} 
 
 ### Crear una tarea (solo admin del equipo)
 
 POST http://localhost:3000/tasks
-
 Content-Type: application/json
-
-
 
 {
 
@@ -98,7 +89,7 @@ Content-Type: application/json
 
   "description": "Subir el trabajo final",
 
-  "userId": 1,
+  "userId": 2,
 
   "teamId": 1
 
@@ -125,10 +116,7 @@ Content-Type: application/json
 ### Marcar tarea como completa (userId: 2)
 
 PUT http://localhost:3000/tasks/1/complete
-
 Content-Type: application/json
-
-
 
 {
 
@@ -153,3 +141,8 @@ GET http://localhost:3000/users
 ### Listar equipos
 
 GET http://localhost:3000/teams
+
+
+### eliminar un equipo (solo admin del equipo)
+DELETE http://localhost:3000/teams/2
+

@@ -23,4 +23,11 @@ export class TeamRepository {
     team.name = name;
     return await this.repo.save(team);
   }
+  //NUEVO: DELETE
+  async delete(id: number) {
+    const team = await this.repo.findOneBy({ id });
+    if (!team) throw new Error("Equipo no encontrado");
+    return await this.repo.remove(team);
+  }
+
 }
