@@ -19,17 +19,15 @@ Content-Type: application/json
 ### Crear un usuario
 
 POST http://localhost:3000/users
-
 Content-Type: application/json
-
-
 
 {
 
   "name": "Ramiro",
 
-  "rol": "user"
+  "rol": "user",
 
+  "teamId": 2
 }
 
 ### Crear otro usuario
@@ -53,14 +51,13 @@ Content-Type: application/json
 ### Crear un equipo
 
 POST http://localhost:3000/teams
-
 Content-Type: application/json
 
 
 
 {
 
-  "name": "Equipo A"
+  "name": "Equipo C"
 
 }
 
@@ -88,9 +85,9 @@ Content-Type: application/json
 
 {
 
-  "title": "Hacer entrega",
+  "title": "tarea de practica",
 
-  "description": "Subir el trabajo final",
+  "description": "acordardate de borrarlo despues",
 
   "userId": 1,
 
@@ -118,7 +115,12 @@ Content-Type: application/json
 
 ### Marcar tarea como completa (userId: 2)
 
-PUT http://localhost:3000/tasks/1/complete
+PUT http://localhost:3000/tasks/5/complete
+
+
+{
+  "userId": 1
+}
 
 Content-Type: application/json
 
@@ -147,3 +149,27 @@ GET http://localhost:3000/users
 ### Listar equipos
 
 GET http://localhost:3000/teams
+
+###modificar tarea 
+PUT http://localhost:3000/tasks/3
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "title": "Nuevo título",
+  "description": "Descripción acthjghjgjhjda",
+  "priority": "alta"
+}
+
+
+### editar usuario con id 1
+PUT http://localhost:3000/users/1
+Content-Type: application/json
+
+{
+  "name": "Ramiro Editado",
+  "rol": "admin",
+  "teamId": 2
+}
+
+
