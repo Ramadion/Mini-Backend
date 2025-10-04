@@ -11,7 +11,6 @@ export class UserService {
 
         rol = rol.toLowerCase() as "admin" | "user";
         if (rol !== "admin" && rol !== "user") throw new Error("El rol debe ser 'admin' o 'user'");
-
         // buscar el equipo
         const teamRepo = AppdataSource.getRepository(Team);
         const team = await teamRepo.findOneBy({ id: teamId });
