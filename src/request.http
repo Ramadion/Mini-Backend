@@ -1,10 +1,9 @@
+##CREACIONES 
+
 ### Crear un admin
 
 POST http://localhost:3000/users
-
 Content-Type: application/json
-
-
 
 {
 
@@ -13,7 +12,6 @@ Content-Type: application/json
   "rol": "admin"
 
 }
-
 
 
 ### Crear un usuario
@@ -30,30 +28,11 @@ Content-Type: application/json
   "teamId": 2
 }
 
-### Crear otro usuario
-
-POST http://localhost:3000/users
-
-Content-Type: application/json
-
-
-
-{
-
-  "name": "Sofia",
-
-  "rol": "user"
-
-}
-
-
 
 ### Crear un equipo
 
 POST http://localhost:3000/teams
 Content-Type: application/json
-
-
 
 {
 
@@ -62,26 +41,10 @@ Content-Type: application/json
 }
 
 
-
-### Asignar usuario al equipo (userId: 2 al teamId: 1)
-
-POST http://localhost:3000/teams/1/users/2
-
-
-
-### Asignar admin al equipo (userId: 1 al teamId: 1)
-
-POST http://localhost:3000/teams/1/users/1
-
-
-
 ### Crear una tarea (solo admin del equipo)
 
 POST http://localhost:3000/tasks
-
 Content-Type: application/json
-
-
 
 {
 
@@ -95,43 +58,65 @@ Content-Type: application/json
 
 }
 
-###crear otra tarea 
-POST http://localhost:3000/tasks
-Content-Type: application/json
+##-------------------------------------------------------------------------------------------------------
+##ASIGNACIONES Y MODIFICACIONES
 
-{
+### Asignar usuario al equipo (userId: 2 al teamId: 1)
 
-  "title": "lavar los platos",
+POST http://localhost:3000/teams/1/users/2
 
-  "description": "lavalo bien no te hagas la loca",
 
-  "userId": 2,
 
-  "teamId": 1
+### Asignar admin al equipo (userId: 1 al teamId: 1)
 
-}
-
+POST http://localhost:3000/teams/2/users/3
 
 
 ### Marcar tarea como completa (userId: 2)
 
 PUT http://localhost:3000/tasks/5/complete
-
+Content-Type: application/json
 
 {
   "userId": 1
 }
 
+
+###modificar tarea 
+PUT http://localhost:3000/tasks/3
 Content-Type: application/json
 
-
-
 {
-
-  "userId": 2
-
+  "userId": 2,
+  "title": "Nuevo título",
+  "description": "Descripción acthjghjgjhjda",
+  "priority": "alta"
 }
 
+
+### delete usuario 
+DELETE http://localhost:3000/users/4
+
+
+###delete tarea
+DELETE http://localhost:3000/tasks/3/2
+
+###delete equipo
+DELETE http://localhost:3000/teams/3
+
+### editar usuario con id 1
+PUT http://localhost:3000/users/1
+Content-Type: application/json
+
+{
+  "name": "Ramiro Editado",
+  "rol": "admin",
+  "teamId": 2
+}
+
+
+##-------------------------------------------------------------------------------------------------------
+##CONSULTAS
 
 
 ### Listar tareas
@@ -150,26 +135,9 @@ GET http://localhost:3000/users
 
 GET http://localhost:3000/teams
 
-###modificar tarea 
-PUT http://localhost:3000/tasks/3
-Content-Type: application/json
-
-{
-  "userId": 2,
-  "title": "Nuevo título",
-  "description": "Descripción acthjghjgjhjda",
-  "priority": "alta"
-}
 
 
-### editar usuario con id 1
-PUT http://localhost:3000/users/1
-Content-Type: application/json
 
-{
-  "name": "Ramiro Editado",
-  "rol": "admin",
-  "teamId": 2
-}
+
 
 
