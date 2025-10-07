@@ -14,13 +14,15 @@ export class TaskRepository {
     return await this.repo.save(task);
   }
 
-  async getAll(id: number) {
-    return await this.repo.find({where: { id }, relations: ["users"] });
-  }
+ async getAll() {
+  return await this.repo.find({ relations: ["team", "user"] });
+}
 
-  async getTasksByTeamId(teamId: number) {
-    return await this.repo.find({ where: { team: { id: teamId } }, relations: ["team"] });
-  }
+async getTasksByTeamId(teamId: number) {
+  return await this.repo.find({ where: { team: { id: teamId } }, 
+    relations: ["team", "user"] 
+  });
+}
 
   async getTasksByUserId(userId: number) {
     return await this.repo

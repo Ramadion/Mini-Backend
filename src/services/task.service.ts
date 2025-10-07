@@ -17,10 +17,18 @@ export class TaskService {
     return await this.taskRepo.create(title, description, teamId);
   }
   //ACOMODE EL GETALLTASKS PARA QUE SOLO ADMINS PUEDAN VER TODAS LAS TAREAS
-  async getAllTasks(userId:number): Promise<Task[]> {
+  async getAllTasks(userId: number): Promise<Task[]> {
     const user = await this.userService.findUserById(userId);
-    if(user?.rol !== "admin") throw new Error("Solo los admins pueden ver todas las tareas");
-    return await this.taskRepo.getAll(userId);
+    if (!user) throw new Error("El usuario no existe");
+
+    // SI ES ADMIN, DEBE VER TODAS LAS TAREAS
+    if(user.rol === "admin") {
+      return await this.taskRepo.getAll();
+    }
+    if(!user.team){
+      throw new Error("El usuario no pertenece a ningún equipo");
+    }
+    return await this.taskRepo.getTasksByTeamId(user.team.id);
   }
 
   //NUEVO VER TAREA DE USUARIO EN EL EQUIPO QUE PARTICIPA
