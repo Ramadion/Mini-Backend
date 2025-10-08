@@ -58,6 +58,22 @@ Content-Type: application/json
 
 }
 
+### crear una tarea para el quipo 2
+POST http://localhost:3000/tasks
+Content-Type: application/json
+
+{
+
+  "title": "tarea de practica equipo 2",
+
+  "description": "acordardate de borrarlo despues",
+
+  "userId": 3,
+
+  "teamId": 2
+
+}
+
 ##-------------------------------------------------------------------------------------------------------
 ##ASIGNACIONES Y MODIFICACIONES
 
@@ -119,8 +135,15 @@ Content-Type: application/json
 ##CONSULTAS
 
 
-### Listar tareas
+### Listar tareas de un usuario (userId: 5 no es admin, SOLO PUEDE VER SU TAREA DE SU EQUIPO)
 
+GET http://localhost:3000/tasks/5 
+
+
+### Listar tareas de un equipo (userId: 1 pertenece al teamId: 1)
+GET http://localhost:3000/tasks/1 
+
+### Listar todas las tareas (userId: 1 es admin)
 GET http://localhost:3000/tasks
 
 
@@ -135,6 +158,9 @@ GET http://localhost:3000/users
 
 GET http://localhost:3000/teams
 
+
+### Listar un equipo por id
+GET http://localhost:3000/teams/1
 
 
 

@@ -14,8 +14,18 @@ export class TaskRepository {
     return await this.repo.save(task);
   }
 
-  async getAll() {
-    return await this.repo.find({ relations: ["team"] });
+ async getAll() {
+  return await this.repo.find({ relations: ["team", "user"] });
+}
+
+async getTasksByTeamId(teamId: number) {
+  return await this.repo.find({ where: { team: { id: teamId } }, 
+    relations: ["team", "user"] 
+  });
+}
+
+  async getTasksByUserId(userId: number) {
+    return await this.repo
   }
 
   async markCompleted(id: number) {
