@@ -3,19 +3,29 @@ import { TaskService } from "../services/task.service";
 import { UserService } from "../services/user.service";
 
 const taskService = new TaskService();
-const userService = new UserService();
 
 export class TaskController {
   create = async (req: Request, res: Response) => {
     try {
-      const { title, description, teamId, userId } = req.body;
-      const task = await taskService.createTask(title, description, teamId, Number(userId));
+      const { title, description, state ,teamId, userId } = req.body;
+      const task = await taskService.createTask(title, description,state ,teamId, Number(userId));
       res.status(201).json(task);
     } catch (err: any) {
       res.status(400).json({ message: err.message });
     }
   };
 
+  markstate = async (req: Request, res: Response) => {
+    try {
+      const id = Number(req.params.id);
+      const { state } = req.body;
+      const updatedTask = await taskService.markTaskState(id, state);
+      return res.json(updatedTask);
+    } catch (err: any) {
+      return res.status(400).json({ message: err.message });
+    } 
+  };
+  
   getAll = async (req: Request, res: Response) => {
     try {
       const userId = Number(req.params.id);

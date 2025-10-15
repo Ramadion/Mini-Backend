@@ -1,22 +1,29 @@
 import { AppdataSource } from "../config/data-source";
-import { Task } from "../entities/task.entity";
+import { Task, TaskState } from "../entities/task.entity";
 import { Team } from "../entities/team.entity";
-
 export class TaskRepository {
   private repo = AppdataSource.getRepository(Task);
 
-  async create(title: string, description: string, teamId: number) {
+  async create(title: string, description: string,state: TaskState ,teamId: number) {
     const teamRepo = AppdataSource.getRepository(Team);
     const team = await teamRepo.findOneBy({ id: teamId });
     if (!team) throw new Error("El equipo no existe");
 
-    const task = this.repo.create({ title, description, team });
+    const task = this.repo.create({ title, description, state ,team });
     return await this.repo.save(task);
   }
 
  async getAll() {
   return await this.repo.find({ relations: ["team", "user"] });
 }
+
+async markState(id: number, state: TaskState) {
+  const task = await this.repo.findOne({ where: { id } });
+  if (!task) throw new Error("La tarea no existe");
+  task.state = state;
+  return await this.repo.save(task);
+}
+
 
 async getTasksByTeamId(teamId: number) {
   return await this.repo.find({ where: { team: { id: teamId } }, 

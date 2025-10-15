@@ -143,8 +143,6 @@ GET http://localhost:3000/tasks/5
 ### Listar tareas de un equipo (userId: 1 pertenece al teamId: 1)
 GET http://localhost:3000/tasks/1 
 
-### Listar todas las tareas (userId: 1 es admin)
-GET http://localhost:3000/tasks
 
 
 
@@ -162,6 +160,14 @@ GET http://localhost:3000/teams
 ### Listar un equipo por id
 GET http://localhost:3000/teams/1
 
+### marcar estado de una tarea (solo admin puede cambiar el estado de una tarea)
+PATCH http://localhost:3000/tasks/1/state
+Content-Type: application/json
+
+{
+  "state": "in-progress",
+  "userId": 1
+}
 
 
 

@@ -1,4 +1,4 @@
-import { Task } from "../entities/task.entity";
+import { Task, TaskState} from "../entities/task.entity";
 import { TaskRepository } from "../repositories/task.repository";
 import { UserService } from "./user.service";
 
@@ -6,7 +6,7 @@ export class TaskService {
   private taskRepo = new TaskRepository();
   private userService = new UserService();
 
-  async createTask(title: string, description: string, teamId: number, userId: number): Promise<Task> {
+  async createTask(title: string, description: string,state: TaskState ,teamId: number, userId: number): Promise<Task> {
     if (!title || !title.trim()) throw new Error("El titulo no puede estar vacío");
 
     const user = await this.userService.findUserById(userId);
@@ -14,8 +14,15 @@ export class TaskService {
     if (user.rol !== "admin") throw new Error("Solo los admins pueden crear tareas");
     
 
-    return await this.taskRepo.create(title, description, teamId);
+    return await this.taskRepo.create(title, description, state, teamId);
   }
+
+  async markTaskState(taskId: number, state: TaskState): Promise<Task> {
+    const task = await this.taskRepo.findOneById(taskId);
+    if (!task) throw new Error("La tarea no existe"); 
+    return await this.taskRepo.markState(taskId, state);
+  }
+
   //ACOMODE EL GETALLTASKS PARA QUE SOLO ADMINS PUEDAN VER TODAS LAS TAREAS
   async getAllTasks(userId: number): Promise<Task[]> {
     const user = await this.userService.findUserById(userId);
