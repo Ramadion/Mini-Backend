@@ -42,22 +42,6 @@ export class TaskService {
   
 
 
-  async markTaskComplete(taskId: number, actorUserId: number): Promise<Task | null> {
-    const task = await this.taskRepo.findOneById(taskId);
-    if (!task) throw new Error("La tarea no existe");
-
-    const actor = await this.userService.findUserById(actorUserId);
-    if (!actor) throw new Error("El usuario no existe");
-
-    if (task.team?.id !== actor.team?.id) {
-      throw new Error("Solo miembros del mismo equipo pueden completar la tarea");
-    }
-
-    if (task.completed) throw new Error("La tarea ya está completada");
-
-    return await this.taskRepo.markCompleted(taskId);
-  }
-
   async deleteTask(taskId: number, actorUserId: number): Promise<void> {
     const task = await this.taskRepo.findOneById(taskId);
     if (!task) throw new Error("La tarea no existe");

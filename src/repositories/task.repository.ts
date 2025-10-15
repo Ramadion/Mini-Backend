@@ -10,7 +10,7 @@ export class TaskRepository {
     const team = await teamRepo.findOneBy({ id: teamId });
     if (!team) throw new Error("El equipo no existe");
 
-    const task = this.repo.create({ title, description, completed: false, team });
+    const task = this.repo.create({ title, description, team });
     return await this.repo.save(task);
   }
 
@@ -28,12 +28,6 @@ async getTasksByTeamId(teamId: number) {
     return await this.repo
   }
 
-  async markCompleted(id: number) {
-    const task = await this.repo.findOne({ where: { id }, relations: ["team"] });
-    if (!task) return null;
-    task.completed = true;
-    return await this.repo.save(task);
-  }
 
   async findOneById(id: number) {
     return await this.repo.findOne({ where: { id }, relations: ["team"] });

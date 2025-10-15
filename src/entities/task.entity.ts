@@ -13,8 +13,8 @@ export class Task {
   @Column()
   description!: string;
 
-  @Column({ default: false })
-  completed!: boolean;
+  @Column()
+  
   
   @Column({type: "text",default:"media"})
   priority!: string;
