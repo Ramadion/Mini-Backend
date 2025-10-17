@@ -15,6 +15,16 @@ export class TaskController {
     }
   };
 
+  createUserTask = async (req: Request, res: Response) => {
+    try {
+      const { title, description, state , userId } = req.body;  
+      const task = await taskService.createUserTask(title, description, state, Number(userId));
+      res.status(201).json(task);
+    } catch (err: any) {
+      res.status(400).json({ message: err.message });
+    } 
+  };
+
   markstate = async (req: Request, res: Response) => {
     try {
       const id = Number(req.params.id);
@@ -26,7 +36,7 @@ export class TaskController {
     } 
   };
   
-  getAll = async (req: Request, res: Response) => {
+  getAllTasks = async (req: Request, res: Response) => {
     try {
       const userId = Number(req.params.id);
       if(!userId || isNaN(userId)) {

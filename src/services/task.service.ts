@@ -10,11 +10,16 @@ export class TaskService {
     if (!title || !title.trim()) throw new Error("El titulo no puede estar vacío");
 
     const user = await this.userService.findUserById(userId);
-    if (!user) throw new Error("El usuario no existe");
-    if (user.rol !== "admin") throw new Error("Solo los admins pueden crear tareas");
+    if (!user) throw new Error("El usuario no existe");    
     
-
     return await this.taskRepo.create(title, description, state, teamId);
+  }
+
+  async createUserTask(title: string, description: string, state: TaskState, userId: number): Promise<Task> {
+    if (!title || !title.trim()) throw new Error("El titulo no puede estar vacío");
+    const user = await this.userService.findUserById(userId);
+    if (!user) throw new Error("El usuario no existe");    
+    return await this.taskRepo.createUserTask(title, description, state, userId);
   }
 
   async markTaskState(taskId: number, state: TaskState): Promise<Task> {
@@ -30,7 +35,7 @@ export class TaskService {
 
     // SI ES ADMIN, DEBE VER TODAS LAS TAREAS
     if(user.rol === "admin") {
-      return await this.taskRepo.getAll();
+      return await this.taskRepo.getAllTasks();
     }
     if(!user.team){
       throw new Error("El usuario no pertenece a ningún equipo");
@@ -71,7 +76,6 @@ async updateTask(id: number, actorUserId: number, data: { title?: string; descri
   const actor = await this.userService.findUserById(actorUserId);
   if (!actor) throw new Error("El usuario no existe");
   
-  if (actor.rol !== "admin") throw new Error("Solo los admins pueden modificar tareas");
   if (task.team?.id !== actor.team?.id) {
     throw new Error("Solo admins del mismo equipo pueden modificar esta tarea");
   }

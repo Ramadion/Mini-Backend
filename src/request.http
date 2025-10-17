@@ -25,7 +25,7 @@ Content-Type: application/json
 
   "rol": "user",
 
-  "teamId": 2
+  "teamId": 1
 }
 
 
@@ -36,10 +36,19 @@ Content-Type: application/json
 
 {
 
-  "name": "Equipo C"
+  "name": "Equipo A"
 
 }
 
+### Crear un equipo 2
+POST http://localhost:3000/teams
+Content-Type: application/json
+
+{
+
+  "name": "Equipo B"
+
+}
 
 ### Crear una tarea (solo admin del equipo)
 
@@ -52,7 +61,7 @@ Content-Type: application/json
 
   "description": "acordardate de borrarlo despues",
 
-  "userId": 1,
+  "userId": 2,
 
   "teamId": 1
 
@@ -68,12 +77,28 @@ Content-Type: application/json
 
   "description": "acordardate de borrarlo despues",
 
-  "userId": 3,
+  "userId": 2,
 
   "teamId": 2
 
 }
 
+
+### crear una tarea para el usuario (userId: 2)
+POST http://localhost:3000/tasks/user 
+Content-Type: application/json
+
+{
+
+  "title": "tarea personal usuario 2",
+
+  "description": "tarea personal del usuario 2",
+
+  "state": "pendiente",
+
+  "userId": 2
+
+}
 ##-------------------------------------------------------------------------------------------------------
 ##ASIGNACIONES Y MODIFICACIONES
 
@@ -85,21 +110,11 @@ POST http://localhost:3000/teams/1/users/2
 
 ### Asignar admin al equipo (userId: 1 al teamId: 1)
 
-POST http://localhost:3000/teams/2/users/3
+POST http://localhost:3000/teams/1/users/1
 
 
-### Marcar tarea como completa (userId: 2)
-
-PUT http://localhost:3000/tasks/5/complete
-Content-Type: application/json
-
-{
-  "userId": 1
-}
-
-
-###modificar tarea 
-PUT http://localhost:3000/tasks/3
+### modificar tarea 
+PUT http://localhost:3000/tasks/1
 Content-Type: application/json
 
 {
@@ -109,6 +124,17 @@ Content-Type: application/json
   "priority": "alta"
 }
 
+
+### modificar tarea 2
+PUT http://localhost:3000/tasks/2 
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "title": "Nuevo título tarea equipo 2",
+  "description": "Descripción acthjghjgjhjda tarea equipo 2",
+  "priority": "baja"
+}
 
 ### delete usuario 
 DELETE http://localhost:3000/users/4
@@ -130,12 +156,30 @@ Content-Type: application/json
   "teamId": 2
 }
 
+### marcar estado de una tarea (solo admin puede cambiar el estado de una tarea)
+PATCH http://localhost:3000/tasks/1/state
+Content-Type: application/json
+
+{
+  "state": "in-progress",
+  "userId": 1
+}
+
+### marcar estado de una tarea de usuario
+PATCH http://localhost:3000/tasks/3/state
+Content-Type: application/json
+
+{
+  "state": "completada",
+  "userId": 2
+} 
+
 
 ##-------------------------------------------------------------------------------------------------------
 ##CONSULTAS
 
 
-### Listar tareas de un usuario (userId: 5 no es admin, SOLO PUEDE VER SU TAREA DE SU EQUIPO)
+### Listar tareas de un usuario (userId: 5 no exite, SOLO PUEDE VER SU TAREA DE SU EQUIPO)
 
 GET http://localhost:3000/tasks/5 
 
@@ -143,7 +187,8 @@ GET http://localhost:3000/tasks/5
 ### Listar tareas de un equipo (userId: 1 pertenece al teamId: 1)
 GET http://localhost:3000/tasks/1 
 
-
+### Listar tareas de un equipo (userId: 2 lista todas las tareas porque es admin)
+GET http://localhost:3000/tasks/2
 
 
 ### Listar usuarios
@@ -160,16 +205,9 @@ GET http://localhost:3000/teams
 ### Listar un equipo por id
 GET http://localhost:3000/teams/1
 
-### marcar estado de una tarea (solo admin puede cambiar el estado de una tarea)
-PATCH http://localhost:3000/tasks/1/state
-Content-Type: application/json
 
-{
-  "state": "in-progress",
-  "userId": 1
-}
-
-
+### listar todas las tareas de todos los usuarios (solo admin puede ver todas las tareas)
+GET http://localhost:3000/tasks/2
 
 
 

@@ -13,23 +13,33 @@ export class TaskRepository {
     return await this.repo.save(task);
   }
 
- async getAll() {
-  return await this.repo.find({ relations: ["team", "user"] });
-}
-
-async markState(id: number, state: TaskState) {
-  const task = await this.repo.findOne({ where: { id } });
-  if (!task) throw new Error("La tarea no existe");
-  task.state = state;
-  return await this.repo.save(task);
-}
+  async createUserTask(title: string, description: string, state: TaskState, userId: number) {
+    const userRepo = AppdataSource.getRepository("User");
+    const user = await userRepo.findOneBy({ id: userId });
+    if (!user) throw new Error("El usuario no existe"); 
+    const task = this.repo.create({ title, description, state, user});
+    return await this.repo.save(task);
+  }
 
 
-async getTasksByTeamId(teamId: number) {
-  return await this.repo.find({ where: { team: { id: teamId } }, 
-    relations: ["team", "user"] 
-  });
-}
+  async getAllTasks() {
+    return await this.repo.find({ relations: ["team", "user"] });
+  }
+  
+
+  async markState(id: number, state: TaskState) {
+    const task = await this.repo.findOne({ where: { id } });
+    if (!task) throw new Error("La tarea no existe");
+    task.state = state;
+    return await this.repo.save(task);
+  }
+
+
+  async getTasksByTeamId(teamId: number) {
+    return await this.repo.find({ where: { team: { id: teamId } }, 
+      relations: ["team", "user"] 
+    });
+  }
 
   async getTasksByUserId(userId: number) {
     return await this.repo
