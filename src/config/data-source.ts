@@ -3,13 +3,15 @@ import { DataSource } from "typeorm";
 import {Task} from "../entities/task.entity";
 import { User } from "../entities/user.entity";
 import { Team } from "../entities/team.entity";
+import { Membership } from "../entities/membership.entity"; 
+
 
 export const AppdataSource = new DataSource({
     type: "sqlite",
     database: "db.sqlite",
     synchronize: false,
     logging: true,
-    entities: [Task,User,Team],
+    entities: [Task,User,Team,Membership],
     migrations: ["src/migrations/*.ts"],
 });
 

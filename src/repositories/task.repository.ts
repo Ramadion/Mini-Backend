@@ -1,31 +1,49 @@
 import { AppdataSource } from "../config/data-source";
 import { Task } from "../entities/task.entity";
 import { Team } from "../entities/team.entity";
+import { User } from "../entities/user.entity";
+import { In } from "typeorm";
 
 export class TaskRepository {
   private repo = AppdataSource.getRepository(Task);
 
-  async create(title: string, description: string, teamId: number) {
+  async create(title: string, description: string, teamId: number, userId: number) {
     const teamRepo = AppdataSource.getRepository(Team);
+    const userRepo = AppdataSource.getRepository(User);
+    
     const team = await teamRepo.findOneBy({ id: teamId });
+    const user = await userRepo.findOneBy({ id: userId });
+    
     if (!team) throw new Error("El equipo no existe");
+    if (!user) throw new Error("El usuario no existe");
 
-    const task = this.repo.create({ title, description, completed: false, team });
+    const task = this.repo.create({ 
+      title, 
+      description, 
+      completed: false, 
+      team,
+      user 
+    });
     return await this.repo.save(task);
   }
 
- async getAll() {
-  return await this.repo.find({ relations: ["team", "user"] });
-}
+  async getAll() {
+    return await this.repo.find({ relations: ["team", "user"] });
+  }
 
-async getTasksByTeamId(teamId: number) {
-  return await this.repo.find({ where: { team: { id: teamId } }, 
-    relations: ["team", "user"] 
-  });
-}
+  async getTasksByTeamId(teamId: number) {
+    return await this.repo.find({ 
+      where: { team: { id: teamId } }, 
+      relations: ["team", "user"] 
+    });
+  }
 
-  async getTasksByUserId(userId: number) {
-    return await this.repo
+  // NUEVO: Obtener tareas por múltiples teamIds
+  async getTasksByTeamIds(teamIds: number[]) {
+    return await this.repo.find({ 
+      where: { team: { id: In(teamIds) } }, 
+      relations: ["team", "user"] 
+    });
   }
 
   async markCompleted(id: number) {
@@ -36,7 +54,7 @@ async getTasksByTeamId(teamId: number) {
   }
 
   async findOneById(id: number) {
-    return await this.repo.findOne({ where: { id }, relations: ["team"] });
+    return await this.repo.findOne({ where: { id }, relations: ["team", "user"] });
   }
 
   async deleteTask(id: number) {
@@ -44,11 +62,10 @@ async getTasksByTeamId(teamId: number) {
   }
 
   async updateTask(id: number, data: Partial<Task>) {
-  const task = await this.repo.findOne({ where: { id } });
-  if (!task) throw new Error("La tarea no existe");
+    const task = await this.repo.findOne({ where: { id } });
+    if (!task) throw new Error("La tarea no existe");
 
-  Object.assign(task, data);
-  return await this.repo.save(task);
-}
-
+    Object.assign(task, data);
+    return await this.repo.save(task);
+  }
 }

@@ -1,169 +1,101 @@
-##CREACIONES 
+#######-------------USUARIOS---------------###########
 
-### Crear un admin
-
+### CREAR USUARIO
 POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-
-  "name": "adminX",
-
-  "rol": "admin"
-
+  "name": "Nombre del usuario",
+  "rol": "admin" // o "user"
 }
 
+### LISTAR TODOS LOS USUARIOS
+GET http://localhost:3000/users
 
-### Crear un usuario
-
-POST http://localhost:3000/users
+### ACTUALIZAR USUARIO
+PUT http://localhost:3000/users/1
 Content-Type: application/json
 
 {
-
-  "name": "Ramiro",
-
-  "rol": "user",
-
-  "teamId": 2
+  "name": "Nuevo nombre",
+  "rol": "user"
 }
 
+### ELIMINAR USUARIO
+DELETE http://localhost:3000/users/1
 
-### Crear un equipo
 
-POST http://localhost:3000/teams
+#######-------------GESTION DE MIEMBROS EN EQUIPOS---------------###########
+
+### AGREGAR MIEMBRO A EQUIPO
+POST http://localhost:3000/teams/1/miembros
 Content-Type: application/json
 
 {
-
-  "name": "Equipo C"
-
+  "userId": 2,
+  "rol": "MIEMBRO", // o "PROPIETARIO"
+  "actorUserId": 1
 }
 
+### LISTAR MIEMBROS DE UN EQUIPO
+GET http://localhost:3000/teams/1/miembros
 
-### Crear una tarea (solo admin del equipo)
+### CAMBIAR ROL DE MIEMBRO
+PUT http://localhost:3000/teams/1/miembros/2
+Content-Type: application/json
 
+{
+  "nuevoRol": "PROPIETARIO",
+  "actorUserId": 1
+}
+
+### REMOVER MIEMBRO DE EQUIPO
+DELETE http://localhost:3000/teams/1/miembros/2
+Content-Type: application/json
+
+{
+  "actorUserId": 1
+}
+
+#######-------------TAREAS---------------###########
+
+### CREAR TAREA (solo propietarios del equipo)
 POST http://localhost:3000/tasks
 Content-Type: application/json
 
 {
+  "title": "Título de la tarea",
+  "description": "Descripción de la tarea",
+  "teamId": 1,
+  "userId": 1
+}
 
-  "title": "tarea de practica",
+### LISTAR TAREAS (según permisos del usuario)
+GET http://localhost:3000/tasks/1
 
-  "description": "acordardate de borrarlo despues",
+### MARCAR TAREA COMO COMPLETA
+PUT http://localhost:3000/tasks/1/complete
+Content-Type: application/json
 
+{
+  "userId": 2
+}
+
+### ACTUALIZAR TAREA
+PUT http://localhost:3000/tasks/1
+Content-Type: application/json
+
+{
   "userId": 1,
-
-  "teamId": 1
-
+  "title": "Nuevo título",
+  "description": "Nueva descripción",
+  "priority": "alta"
 }
 
-### crear una tarea para el quipo 2
-POST http://localhost:3000/tasks
-Content-Type: application/json
-
-{
-
-  "title": "tarea de practica equipo 2",
-
-  "description": "acordardate de borrarlo despues",
-
-  "userId": 3,
-
-  "teamId": 2
-
-}
-
-##-------------------------------------------------------------------------------------------------------
-##ASIGNACIONES Y MODIFICACIONES
-
-### Asignar usuario al equipo (userId: 2 al teamId: 1)
-
-POST http://localhost:3000/teams/1/users/2
-
-
-
-### Asignar admin al equipo (userId: 1 al teamId: 1)
-
-POST http://localhost:3000/teams/2/users/3
-
-
-### Marcar tarea como completa (userId: 2)
-
-PUT http://localhost:3000/tasks/5/complete
+### ELIMINAR TAREA
+DELETE http://localhost:3000/tasks/1
 Content-Type: application/json
 
 {
   "userId": 1
 }
-
-
-###modificar tarea 
-PUT http://localhost:3000/tasks/3
-Content-Type: application/json
-
-{
-  "userId": 2,
-  "title": "Nuevo título",
-  "description": "Descripción acthjghjgjhjda",
-  "priority": "alta"
-}
-
-
-### delete usuario 
-DELETE http://localhost:3000/users/4
-
-
-###delete tarea
-DELETE http://localhost:3000/tasks/3/2
-
-###delete equipo
-DELETE http://localhost:3000/teams/3
-
-### editar usuario con id 1
-PUT http://localhost:3000/users/1
-Content-Type: application/json
-
-{
-  "name": "Ramiro Editado",
-  "rol": "admin",
-  "teamId": 2
-}
-
-
-##-------------------------------------------------------------------------------------------------------
-##CONSULTAS
-
-
-### Listar tareas de un usuario (userId: 5 no es admin, SOLO PUEDE VER SU TAREA DE SU EQUIPO)
-
-GET http://localhost:3000/tasks/5 
-
-
-### Listar tareas de un equipo (userId: 1 pertenece al teamId: 1)
-GET http://localhost:3000/tasks/1 
-
-### Listar todas las tareas (userId: 1 es admin)
-GET http://localhost:3000/tasks
-
-
-
-### Listar usuarios
-
-GET http://localhost:3000/users
-
-
-
-### Listar equipos
-
-GET http://localhost:3000/teams
-
-
-### Listar un equipo por id
-GET http://localhost:3000/teams/1
-
-
-
-
-
-
