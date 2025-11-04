@@ -3,6 +3,7 @@ import { AppdataSource } from "./config/data-source";
 import taskRoutes from "./routes/task.routes";
 import userRoutes from "./routes/user.routes";
 import teamRoutes from "./routes/team.routes";
+import estadoRoutes from "./routes/estado.routes";
 
 
 const app = express();
@@ -19,7 +20,7 @@ AppdataSource.initialize()
     app.use("/users", userRoutes);
     app.use("/tasks", taskRoutes);
     app.use("/teams", teamRoutes);
-
+    app.use("/", estadoRoutes);
     
 
     app.listen(3000, () => {

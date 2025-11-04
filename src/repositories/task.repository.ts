@@ -1,5 +1,5 @@
 import { AppdataSource } from "../config/data-source";
-import { Task } from "../entities/task.entity";
+import { Task, EstadoTarea } from "../entities/task.entity"; // Agregar EstadoTarea al import
 import { Team } from "../entities/team.entity";
 import { User } from "../entities/user.entity";
 import { In } from "typeorm";
@@ -20,7 +20,7 @@ export class TaskRepository {
     const task = this.repo.create({ 
       title, 
       description, 
-      completed: false, 
+      estado: EstadoTarea.PENDIENTE, // Estado inicial
       team,
       user 
     });
@@ -46,12 +46,6 @@ export class TaskRepository {
     });
   }
 
-  async markCompleted(id: number) {
-    const task = await this.repo.findOne({ where: { id }, relations: ["team"] });
-    if (!task) return null;
-    task.completed = true;
-    return await this.repo.save(task);
-  }
 
   async findOneById(id: number) {
     return await this.repo.findOne({ where: { id }, relations: ["team", "user"] });
@@ -67,5 +61,22 @@ export class TaskRepository {
 
     Object.assign(task, data);
     return await this.repo.save(task);
+  }
+
+  async getTasksByEstado(estado: EstadoTarea) {
+    return await this.repo.find({ 
+      where: { estado }, 
+      relations: ["team", "user"] 
+    });
+  }
+
+  async getTasksByTeamIdsAndEstado(teamIds: number[], estado: EstadoTarea) {
+    return await this.repo.find({ 
+      where: { 
+        team: { id: In(teamIds) },
+        estado: estado
+      }, 
+      relations: ["team", "user"] 
+    });
   }
 }

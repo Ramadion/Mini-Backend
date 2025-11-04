@@ -1,4 +1,4 @@
-import { Task } from "../entities/task.entity";
+import { Task, EstadoTarea } from "../entities/task.entity";
 import { TaskRepository } from "../repositories/task.repository";
 import { UserService } from "./user.service";
 import { MembershipService } from "./membership.service";
@@ -51,22 +51,22 @@ export class TaskService {
     return await this.taskRepo.getTasksByTeamIds(teamIds);
   }
 
-  async markTaskComplete(taskId: number, actorUserId: number): Promise<Task | null> {
-    const task = await this.taskRepo.findOneById(taskId);
-    if (!task) throw new Error("La tarea no existe");
+  async getTasksByEstado(userId: number, estado: EstadoTarea): Promise<Task[]> {
+    const user = await this.userService.findUserById(userId);
+    if (!user) throw new Error("El usuario no existe");
 
-    const actor = await this.userService.findUserById(actorUserId);
-    if (!actor) throw new Error("El usuario no existe");
-
-    // Verificar que el actor pertenece al equipo de la tarea
-    const membresia = await this.membershipService.obtenerMembresia(task.team.id, actorUserId);
-    if (!membresia) {
-      throw new Error("Solo miembros del mismo equipo pueden completar la tarea");
+    if (user.rol === "admin") {
+      return await this.taskRepo.getTasksByEstado(estado);
     }
 
-    if (task.completed) throw new Error("La tarea ya está completada");
+    // Para usuarios normales, filtrar por sus equipos
+    const membresias = await this.membershipService.obtenerMembresiasPorUsuario(userId);
+    if (membresias.length === 0) {
+      throw new Error("El usuario no pertenece a ningún equipo");
+    }
 
-    return await this.taskRepo.markCompleted(taskId);
+    const teamIds = membresias.map(m => m.team.id);
+    return await this.taskRepo.getTasksByTeamIdsAndEstado(teamIds, estado);
   }
 
   async deleteTask(taskId: number, actorUserId: number): Promise<void> {
@@ -96,6 +96,11 @@ export class TaskService {
     const membresia = await this.membershipService.obtenerMembresia(task.team.id, actorUserId);
     if (!membresia || membresia.rol !== "PROPIETARIO") {
       throw new Error("Solo propietarios del equipo pueden modificar tareas");
+    }
+
+    // No permitir edición si la tarea está finalizada o cancelada
+    if (task.estado === EstadoTarea.FINALIZADA || task.estado === EstadoTarea.CANCELADA) {
+      throw new Error("No se puede modificar una tarea finalizada o cancelada");
     }
 
     return await this.taskRepo.updateTask(id, data);
