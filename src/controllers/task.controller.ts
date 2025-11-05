@@ -30,16 +30,16 @@ export class TaskController {
       
   };
 
-  markCompleted = async (req: Request, res: Response) => {
-    try {
-      const id = Number(req.params.id);
-      const { userId } = req.body;
-      const task = await taskService.markTaskComplete(id, Number(userId));
-      return res.json(task);
-    } catch (err: any) {
-      return res.status(400).json({ message: err.message });
-    }
-  };
+  // markCompleted = async (req: Request, res: Response) => {
+  //   try {
+  //     const id = Number(req.params.id);
+  //     const { userId } = req.body;
+  //     const task = await taskService.markTaskComplete(id, Number(userId));
+  //     return res.json(task);
+  //   } catch (err: any) {
+  //     return res.status(400).json({ message: err.message });
+  //   }
+  // };
 
   delete = async (req: Request, res: Response) => {
     try {

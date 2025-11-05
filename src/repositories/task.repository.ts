@@ -28,28 +28,32 @@ export class TaskRepository {
   }
 
   async getAll() {
-    return await this.repo.find({ relations: ["team", "user"] });
+  return await this.repo.find({ 
+    relations: ["team", "user", "etiquetas"] 
+  });
   }
 
   async getTasksByTeamId(teamId: number) {
-    return await this.repo.find({ 
-      where: { team: { id: teamId } }, 
-      relations: ["team", "user"] 
-    });
+  return await this.repo.find({ 
+    where: { team: { id: teamId } }, 
+    relations: ["team", "user", "etiquetas"]  
+  });
   }
 
-  // NUEVO: Obtener tareas por múltiples teamIds
   async getTasksByTeamIds(teamIds: number[]) {
-    return await this.repo.find({ 
-      where: { team: { id: In(teamIds) } }, 
-      relations: ["team", "user"] 
-    });
+  return await this.repo.find({ 
+    where: { team: { id: In(teamIds) } }, 
+    relations: ["team", "user", "etiquetas"]  
+  });
   }
 
 
   async findOneById(id: number) {
-    return await this.repo.findOne({ where: { id }, relations: ["team", "user"] });
-  }
+  return await this.repo.findOne({ 
+    where: { id }, 
+    relations: ["team", "user", "etiquetas"] 
+  });
+}
 
   async deleteTask(id: number) {
     await this.repo.delete(id);
@@ -64,19 +68,19 @@ export class TaskRepository {
   }
 
   async getTasksByEstado(estado: EstadoTarea) {
-    return await this.repo.find({ 
-      where: { estado }, 
-      relations: ["team", "user"] 
-    });
+  return await this.repo.find({ 
+    where: { estado }, 
+    relations: ["team", "user", "etiquetas"]  
+  });
   }
 
   async getTasksByTeamIdsAndEstado(teamIds: number[], estado: EstadoTarea) {
-    return await this.repo.find({ 
-      where: { 
-        team: { id: In(teamIds) },
-        estado: estado
-      }, 
-      relations: ["team", "user"] 
-    });
+  return await this.repo.find({ 
+    where: { 
+      team: { id: In(teamIds) },
+      estado: estado
+    }, 
+    relations: ["team", "user", "etiquetas"]  
+  });
   }
 }

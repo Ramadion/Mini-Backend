@@ -19,6 +19,12 @@ export class UserController {
     res.json(users);
   };
 
+  getUserById = async (_req : Request, res : Response) =>{
+    const userid = Number(_req.params.id)
+    const user = await userService.findUserById(userid)
+    res.json(user)
+  }
+
   update = async (req: Request, res: Response) => {
     try {
       const id = Number(req.params.id);

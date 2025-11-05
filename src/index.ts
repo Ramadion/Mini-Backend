@@ -4,6 +4,8 @@ import taskRoutes from "./routes/task.routes";
 import userRoutes from "./routes/user.routes";
 import teamRoutes from "./routes/team.routes";
 import estadoRoutes from "./routes/estado.routes";
+import etiquetaRoutes from "./routes/etiqueta.routes";
+import tareaEtiquetaRoutes from "./routes/tarea-etiqueta.routes";
 
 
 const app = express();
@@ -21,6 +23,8 @@ AppdataSource.initialize()
     app.use("/tasks", taskRoutes);
     app.use("/teams", teamRoutes);
     app.use("/", estadoRoutes);
+    app.use("/etiquetas", etiquetaRoutes);
+    app.use("/", tareaEtiquetaRoutes);
     
 
     app.listen(3000, () => {

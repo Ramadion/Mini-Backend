@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn , OneToMany , ManyToMany , JoinTable} from "typeorm";
 import { User } from "./user.entity";
 import { Team } from "./team.entity";
 import { HistorialEstado } from "./historial-estado.entity";
+import { Etiqueta } from "./etiqueta.entity";
 
 export enum EstadoTarea {
   PENDIENTE = "PENDIENTE",
@@ -48,4 +49,18 @@ export class Task {
 
   @ManyToOne(() => HistorialEstado, (historial) => historial.tarea)
   historialEstados!: HistorialEstado[];
+
+  @ManyToMany(() => Etiqueta, (etiqueta) => etiqueta.tareas)
+  @JoinTable({
+  name: "tarea_etiquetas",
+  joinColumn: {
+    name: "tarea_id",
+    referencedColumnName: "id",
+  },
+  inverseJoinColumn: {
+    name: "etiqueta_id",
+    referencedColumnName: "id",
+  },
+})
+etiquetas!: Etiqueta[];
 }
