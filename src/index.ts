@@ -12,7 +12,7 @@ import cors from "cors";
 
 const app = express();
 app.use(cors({
-  origin: 'http://localhost:3001', // Puerto de tu frontend React
+  origin: 'http://localhost:3001', // Puerto de frontend React
   credentials: true
 }));
 app.use(express.json());
