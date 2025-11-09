@@ -105,4 +105,9 @@ export class TaskService {
 
     return await this.taskRepo.updateTask(id, data);
   }
+
+  async getTaskById(taskId: number): Promise<Task | null> {
+  return await this.taskRepo.findOneById(taskId);
+}
+
 }

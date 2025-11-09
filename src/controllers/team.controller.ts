@@ -41,9 +41,10 @@ export class TeamController {
     }
   };
 
-  getAll = async (_req: Request, res: Response) => {
+  getAll = async (req: Request, res: Response) => {
     try {
-      const teams = await teamService.getAllTeams();
+      const filters = req.query["userid"] ? {userId: parseInt(req.query["userid"] as string) } : undefined;
+      const teams = await teamService.getAllTeams(filters)
       return res.json(teams);
     } catch (err: any) {
       return res.status(500).json({ message: "Error al obtener equipos" });
