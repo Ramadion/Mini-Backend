@@ -21,20 +21,22 @@ export class CommentController {
   };
 
   obtenerComentariosDeTarea = async (req: Request, res: Response) => {
-    try {
-      const tareaId = Number(req.params.tareaId);
-      const { usuarioId } = req.body;
+  try {
+    const tareaId = Number(req.params.tareaId);
+    // CAMBIO IMPORTANTE: Obtener usuarioId de query parameters en lugar del body
+    const { usuarioId } = req.query; // Cambiar de req.body a req.query
 
-      if (!usuarioId) {
-        return res.status(400).json({ message: "Se requiere usuarioId" });
-      }
-
-      const comentarios = await commentService.obtenerComentariosPorTarea(tareaId, usuarioId);
-      return res.json(comentarios);
-    } catch (err: any) {
-      return res.status(400).json({ message: err.message });
+    if (!usuarioId) {
+      return res.status(400).json({ message: "Se requiere usuarioId" });
     }
-  };
+
+    const comentarios = await commentService.obtenerComentariosPorTarea(tareaId, Number(usuarioId));
+    return res.json(comentarios);
+  } catch (err: any) {
+    console.error('Error en obtenerComentariosDeTarea:', err);
+    return res.status(400).json({ message: err.message });
+  }
+};
 
   actualizarComentario = async (req: Request, res: Response) => {
     try {
