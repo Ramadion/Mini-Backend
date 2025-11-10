@@ -11,23 +11,29 @@ export class TaskService {
   private membershipService = new MembershipService();
   private teamRepo = AppdataSource.getRepository(Team);
 
-  async createTask(title: string, description: string, teamId: number, userId: number): Promise<Task> {
-    if (!title || !title.trim()) throw new Error("El titulo no puede estar vacío");
+  async createTask(
+  title: string, 
+  description: string, 
+  teamId: number, 
+  userId: number, 
+  priority: string = 'media'  // AGREGAR priority como parámetro
+): Promise<Task> {
+  if (!title || !title.trim()) throw new Error("El titulo no puede estar vacío");
 
-    const user = await this.userService.findUserById(userId);
-    if (!user) throw new Error("El usuario no existe");
-    
-    // Verificar que el usuario es admin del equipo específico
-    const membresia = await this.membershipService.obtenerMembresia(teamId, userId);
-    if (!membresia || membresia.rol !== "PROPIETARIO") {
-      throw new Error("Solo los propietarios del equipo pueden crear tareas");
-    }
-
-    const team = await this.teamRepo.findOneBy({ id: teamId });
-    if (!team) throw new Error("El equipo no existe");
-
-    return await this.taskRepo.create(title, description, teamId, userId);
+  const user = await this.userService.findUserById(userId);
+  if (!user) throw new Error("El usuario no existe");
+  
+  const membresia = await this.membershipService.obtenerMembresia(teamId, userId);
+  if (!membresia || membresia.rol !== "PROPIETARIO") {
+    throw new Error("Solo los propietarios del equipo pueden crear tareas");
   }
+
+  const team = await this.teamRepo.findOneBy({ id: teamId });
+  if (!team) throw new Error("El equipo no existe");
+
+  // MODIFICAR: Pasar priority al repositorio
+  return await this.taskRepo.create(title, description, teamId, userId, priority);
+}
 
   async getAllTasks(userId: number): Promise<Task[]> {
     const user = await this.userService.findUserById(userId);

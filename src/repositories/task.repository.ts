@@ -7,24 +7,31 @@ import { In } from "typeorm";
 export class TaskRepository {
   private repo = AppdataSource.getRepository(Task);
 
-  async create(title: string, description: string, teamId: number, userId: number) {
-    const teamRepo = AppdataSource.getRepository(Team);
-    const userRepo = AppdataSource.getRepository(User);
-    
-    const team = await teamRepo.findOneBy({ id: teamId });
-    const user = await userRepo.findOneBy({ id: userId });
-    
-    if (!team) throw new Error("El equipo no existe");
-    if (!user) throw new Error("El usuario no existe");
+  async create(
+  title: string, 
+  description: string, 
+  teamId: number, 
+  userId: number, 
+  priority: string  // AGREGAR priority
+  ) {
+  const teamRepo = AppdataSource.getRepository(Team);
+  const userRepo = AppdataSource.getRepository(User);
+  
+  const team = await teamRepo.findOneBy({ id: teamId });
+  const user = await userRepo.findOneBy({ id: userId });
+  
+  if (!team) throw new Error("El equipo no existe");
+  if (!user) throw new Error("El usuario no existe");
 
-    const task = this.repo.create({ 
-      title, 
-      description, 
-      estado: EstadoTarea.PENDIENTE, // Estado inicial
-      team,
-      user 
-    });
-    return await this.repo.save(task);
+  const task = this.repo.create({ 
+    title, 
+    description, 
+    estado: EstadoTarea.PENDIENTE,
+    priority,  // AGREGAR: Usar la priority recibida
+    team,
+    user 
+  });
+  return await this.repo.save(task);
   }
 
   async getAll() {

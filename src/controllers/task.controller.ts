@@ -6,14 +6,18 @@ const taskService = new TaskService();
 const userService = new UserService();
 
 export class TaskController {
+ 
   create = async (req: Request, res: Response) => {
-    try {
-      const { title, description, teamId, userId } = req.body;
-      const task = await taskService.createTask(title, description, teamId, Number(userId));
-      res.status(201).json(task);
-    } catch (err: any) {
-      res.status(400).json({ message: err.message });
-    }
+  try {
+    // MODIFICAR: Incluir priority en el destructuring
+    const { title, description, teamId, userId, priority = 'media' } = req.body;
+    
+    // MODIFICAR: Pasar priority al servicio
+    const task = await taskService.createTask(title, description, teamId, Number(userId), priority);
+    res.status(201).json(task);
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
+  }
   };
 
   getAll = async (req: Request, res: Response) => {
