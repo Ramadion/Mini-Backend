@@ -9,16 +9,26 @@ export class TaskController {
  
   create = async (req: Request, res: Response) => {
   try {
-    // MODIFICAR: Incluir priority en el destructuring
-    const { title, description, teamId, userId, priority = 'media' } = req.body;
+    // MODIFICAR: Incluir dueDate en el destructuring
+    const { title, description, teamId, userId, priority = 'media', dueDate } = req.body;
     
-    // MODIFICAR: Pasar priority al servicio
-    const task = await taskService.createTask(title, description, teamId, Number(userId), priority);
+    console.log('📥 Backend recibió:', { 
+      title, 
+      description, 
+      teamId, 
+      userId, 
+      priority, 
+      dueDate  // AGREGAR ESTO
+    });
+
+    // MODIFICAR: Pasar dueDate al servicio
+    const task = await taskService.createTask(title, description, teamId, Number(userId), priority, dueDate);
+    console.log('✅ Tarea creada:', task);
     res.status(201).json(task);
   } catch (err: any) {
     res.status(400).json({ message: err.message });
   }
-  };
+};
 
   getAll = async (req: Request, res: Response) => {
     try {
