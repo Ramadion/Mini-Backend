@@ -2,12 +2,14 @@ import { CommentRepository } from "../repositories/comment.repository";
 import { MembershipService } from "./membership.service";
 import { UserService } from "./user.service";
 import { TaskService } from "./task.service";
+import { NotificationService } from "./notification.service"; 
 
 export class CommentService {
   private commentRepo = new CommentRepository();
   private membershipService = new MembershipService();
   private userService = new UserService();
   private taskService = new TaskService();
+  private notificationService = new NotificationService(); 
 
   async crearComentario(contenido: string, tareaId: number, usuarioId: number) {
     if (!contenido || !contenido.trim()) {
@@ -26,7 +28,17 @@ export class CommentService {
       throw new Error("No tienes permisos para comentar en esta tarea");
     }
 
-    return await this.commentRepo.create(contenido, usuarioId, tareaId);
+    const comment = await this.commentRepo.create(contenido, usuarioId, tareaId);
+
+    // NUEVO: Notificar a los watchers
+    try {
+      await this.notificationService.notifyCommentAdded(tareaId, usuarioId, contenido);
+    } catch (error) {
+      console.error("Error al enviar notificaciones de comentario:", error);
+      // No fallar la creación del comentario si falla la notificación
+    }
+
+    return comment;
   }
 
   async obtenerComentariosPorTarea(tareaId: number, usuarioId: number) {

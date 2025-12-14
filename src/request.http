@@ -654,8 +654,8 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-  "name": "usuario normal 1",
-  "email": "user@example.com",
+  "name": "usuario normal 7000000dnsajkdnasm00",
+  "email": "useasdassfdsfsdasdr@example.com",
   "password": "admin123"
 }
 
@@ -719,7 +719,7 @@ POST http://localhost:3000/teams/1/miembros
 Content-Type: application/json
 
 {
-  "userId": 2,
+  "userId": 6,
   "rol": "MIEMBRO",
   "actorUserId": 1
 }
@@ -945,7 +945,7 @@ Content-Type: application/json
 
 {
   "contenido": "Este es mi primer comentario en esta tarea",
-  "usuarioId": 1
+  "usuarioId": 6
 }
 
 ### 2. Obtener comentarios de una tarea
@@ -972,3 +972,105 @@ Content-Type: application/json
 {
   "usuarioId": 1
 }
+
+
+######3NUEVO PARA EL FINAL#########
+###############################################
+# 🎯 WATCHERS - SISTEMA DE SUSCRIPCIÓN
+###############################################
+
+### 1. Suscribirse a una tarea
+POST http://localhost:3000/api/tasks/1/watchers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE3NjUyMzMwMTh9.iH_H_HW4elMzcoUMUMCad-dJCEaOcOAVzpPE_ajE0r8
+
+### 2. Ver watchers de una tarea
+GET http://localhost:3000/api/tasks/1/watchers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE3NjUyMzMwMTh9.iH_H_HW4elMzcoUMUMCad-dJCEaOcOAVzpPE_ajE0r8
+
+### 3. Verificar si estoy suscrito
+GET http://localhost:3000/api/tasks/1/watchers/status
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE3NjUyMzMwMTh9.iH_H_HW4elMzcoUMUMCad-dJCEaOcOAVzpPE_ajE0r8
+
+### 4. Desuscribirse de una tarea
+DELETE http://localhost:3000/api/tasks/1/watchers/6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE3NjUyMzMwMTh9.iH_H_HW4elMzcoUMUMCad-dJCEaOcOAVzpPE_ajE0r8
+
+### 5. Ver mi watchlist (todas las tareas que sigo)
+GET http://localhost:3000/api/watchers/watchlist?page=1&limit=20
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE3NjUyMzMwMTh9.iH_H_HW4elMzcoUMUMCad-dJCEaOcOAVzpPE_ajE0r8
+
+### 6. Ver watchlist filtrada por equipo
+GET http://localhost:3000/api/watchers/watchlist?teamId=1&page=1&limit=20
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE3NjUyMzMwMTh9.iH_H_HW4elMzcoUMUMCad-dJCEaOcOAVzpPE_ajE0r8
+
+### 7. Ver watchlist filtrada por estado
+GET http://localhost:3000/api/watchers/watchlist?status=EN_CURSO&page=1&limit=20
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE3NjUyMzMwMTh9.iH_H_HW4elMzcoUMUMCad-dJCEaOcOAVzpPE_ajE0r8
+
+###############################################
+# 🔔 NOTIFICACIONES
+###############################################
+
+### Ver notificaciones
+GET http://localhost:3000/api/notifications
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE3NjUyMzMwMTh9.iH_H_HW4elMzcoUMUMCad-dJCEaOcOAVzpPE_ajE0r8
+
+### 9. Ver solo notificaciones no leídas
+GET http://localhost:3000/api/notifications?unreadOnly=true&page=1&limit=20
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE3NjUyMzMwMTh9.iH_H_HW4elMzcoUMUMCad-dJCEaOcOAVzpPE_ajE0r8
+
+### 10. Contar notificaciones no leídas
+GET http://localhost:3000/api/notifications/unread-count
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE3NjUyMzMwMTh9.iH_H_HW4elMzcoUMUMCad-dJCEaOcOAVzpPE_ajE0r8
+
+### 11. Marcar notificación como leída (cambiar el ID)
+PATCH http://localhost:3000/api/notifications/1/read
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE3NjUyMzMwMTh9.iH_H_HW4elMzcoUMUMCad-dJCEaOcOAVzpPE_ajE0r8
+
+### 12. Marcar todas las notificaciones como leídas
+PATCH http://localhost:3000/api/notifications/read-all
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE3NjUyMzMwMTh9.iH_H_HW4elMzcoUMUMCad-dJCEaOcOAVzpPE_ajE0r8
+
+###############################################
+# 🧪 GENERAR NOTIFICACIONES PARA PROBAR
+###############################################
+
+### 13. Cambiar estado de tarea (genera notificación STATUS_CHANGE)
+PATCH http://localhost:3000/api/tasks/1/estado
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE3NjUyMzMwMTh9.iH_H_HW4elMzcoUMUMCad-dJCEaOcOAVzpPE_ajE0r8
+Content-Type: application/json
+
+{
+  "nuevoEstado": "EN_CURSO"
+}
+
+### 14. Agregar comentario (genera notificación COMMENT_ADDED)
+POST http://localhost:3000/api/tasks/1/comments
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE3NjUyMzMwMTh9.iH_H_HW4elMzcoUMUMCad-dJCEaOcOAVzpPE_ajE0r8
+Content-Type: application/json
+
+{
+  "contenido": "Este es un comentario de prueba"
+}
+
+### 15. Actualizar prioridad (genera notificación PRIORITY_CHANGE)
+PATCH http://localhost:3000/api/tasks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE3NjUyMzMwMTh9.iH_H_HW4elMzcoUMUMCad-dJCEaOcOAVzpPE_ajE0r8
+Content-Type: application/json
+
+{
+  "priority": "alta"
+}
+
+### 16. Actualizar título (genera notificación TASK_UPDATED)
+PATCH http://localhost:3000/api/tasks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE3NjUyMzMwMTh9.iH_H_HW4elMzcoUMUMCad-dJCEaOcOAVzpPE_ajE0r8
+Content-Type: application/json
+
+{
+  "title": "Nuevo título de tarea"
+}
+
+### 17. Ver todas las tareas (para obtener IDs)
+GET http://localhost:3000/api/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE3NjUyMzMwMTh9.iH_H_HW4elMzcoUMUMCad-dJCEaOcOAVzpPE_ajE0r8

@@ -4,6 +4,7 @@ import { HistorialEstado } from "../entities/historial-estado.entity";
 import { User } from "../entities/user.entity";
 import { MembershipService } from "./membership.service";
 import { UserService } from "./user.service";
+import { NotificationService } from "./notification.service";
 
 export class EstadoService {
   private taskRepo = AppdataSource.getRepository(Task);
@@ -11,6 +12,7 @@ export class EstadoService {
   private userRepo = AppdataSource.getRepository(User);
   private membershipService = new MembershipService();
   private userService = new UserService();
+  private notificationService = new NotificationService;
 
   private transicionesValidas = {
     [EstadoTarea.PENDIENTE]: [EstadoTarea.EN_CURSO, EstadoTarea.CANCELADA],
@@ -19,7 +21,8 @@ export class EstadoService {
     [EstadoTarea.CANCELADA]: [EstadoTarea.PENDIENTE, EstadoTarea.EN_CURSO]
   };
 
-  async cambiarEstado(tareaId: number, nuevoEstado: EstadoTarea, usuarioId: number): Promise<Task> {
+  
+async cambiarEstado(tareaId: number, nuevoEstado: EstadoTarea, usuarioId: number): Promise<Task> {
     const tarea = await this.taskRepo.findOne({ 
       where: { id: tareaId }, 
       relations: ["team", "user"] 
@@ -62,9 +65,23 @@ export class EstadoService {
     });
 
     await this.historialRepo.save(historial);
-    return await this.taskRepo.save(tarea);
-  }
+    const tareaActualizada = await this.taskRepo.save(tarea);
 
+    //  Notificar a los watchers sobre el cambio de estado
+    try {
+      await this.notificationService.notifyStatusChange(
+        tareaId,
+        usuarioId,
+        estadoAnterior,
+        nuevoEstado
+      );
+    } catch (error) {
+      console.error("Error al enviar notificaciones de cambio de estado:", error);
+      // No lanzar error para no interrumpir el flujo principal
+    }
+
+    return tareaActualizada;
+  }
   async obtenerHistorial(tareaId: number): Promise<HistorialEstado[]> {
     return await this.historialRepo.find({
       where: { tarea: { id: tareaId } },

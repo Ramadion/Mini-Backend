@@ -4,7 +4,12 @@ import { AuthService } from '../services/auth.service';
 const authService = new AuthService();
 
 export interface AuthenticatedRequest extends Request {
-  user?: any;
+  user?: {
+    id: number;
+    email: string;
+    rol: string;
+    iat?: number;
+  };
 }
 
 export const authenticateToken = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
@@ -17,9 +22,19 @@ export const authenticateToken = async (req: AuthenticatedRequest, res: Response
 
   try {
     const decoded = authService.verifyToken(token);
-    req.user = decoded;
+    
+    // IMPORTANTE: Asegurarse de que el objeto user tiene la estructura correcta
+    req.user = {
+      id: decoded.id,
+      email: decoded.email,
+      rol: decoded.rol,
+      iat: decoded.iat
+    };
+    
+    console.log('✅ Usuario autenticado:', req.user); // Debug
     next();
   } catch (error) {
+    console.error('❌ Error verificando token:', error);
     return res.status(403).json({ message: 'Token inválido o expirado' });
   }
 };
